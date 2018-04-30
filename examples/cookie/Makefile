@@ -1,4 +1,4 @@
-fileserver: clean
+cookie: clean
 	go get -u github.com/erikdubbelboer/fasthttp
 	go build server.go
 	go build client.go
