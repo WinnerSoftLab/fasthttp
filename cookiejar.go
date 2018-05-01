@@ -36,7 +36,7 @@ func (cj *CookieJar) SetBytesKV(key, value []byte) {
 func setCookie(cj *CookieJar, key, value string) {
 	c, ok := (*cj)[key]
 	if !ok {
-		c = fasthttp.AcquireCookie()
+		c = AcquireCookie()
 	}
 	c.SetKey(key)
 	c.SetValue(value)
@@ -47,7 +47,7 @@ func setCookie(cj *CookieJar, key, value string) {
 //
 // After that you can use Peek function to get cookie value.
 func (cj *CookieJar) SetCookie(cookie *Cookie) {
-	(*cj)[b2s(c.Key())] = cookie
+	(*cj)[b2s(cookie.Key())] = cookie
 }
 
 // Peek peeks cookie value using key.
@@ -60,7 +60,7 @@ func (cj *CookieJar) Peek(key string) *Cookie {
 // Release releases all cookie values.
 func (cj *CookieJar) Release() {
 	for k, v := range *cj {
-		fasthttp.ReleaseCookie(v)
+		ReleaseCookie(v)
 		delete(*cj, k)
 	}
 }
@@ -69,7 +69,7 @@ func (cj *CookieJar) Release() {
 func (cj *CookieJar) ReleaseCookie(key string) {
 	c, ok := (*cj)[key]
 	if ok {
-		fasthttp.ReleaseCookie(c)
+		ReleaseCookie(c)
 		delete(*cj, key)
 	}
 }
