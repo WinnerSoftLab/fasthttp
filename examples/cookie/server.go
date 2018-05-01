@@ -17,6 +17,10 @@ func cookieHandler(ctx *fasthttp.RequestCtx) {
 	cookie := fasthttp.AcquireCookie()
 	cookie1 := fasthttp.AcquireCookie()
 	cookie2 := fasthttp.AcquireCookie()
+	// do not forget to release
+	defer fasthttp.ReleaseCookie(cookie)
+	defer fasthttp.ReleaseCookie(cookie1)
+	defer fasthttp.ReleaseCookie(cookie2)
 
 	cookie.SetDomain("make.fasthttp.great.again")
 	cookie.SetKey("key")

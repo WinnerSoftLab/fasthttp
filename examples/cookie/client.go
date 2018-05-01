@@ -18,6 +18,8 @@ func main() {
 	// We can achieve cookies by different ways.
 	// 1. Using 'key' parameter. Fasthttp will search using key in cookie field.
 	cookie := fasthttp.AcquireCookie()
+	// do not forget to release
+	defer fasthttp.ReleaseCookie(cookie)
 	cookie.SetKey("key")
 
 	res.Header.Cookie(cookie)
@@ -42,6 +44,8 @@ func main() {
 
 	// 4. Or finally you can use CookieJar object.
 	cookieJar := &fasthttp.CookieJar{}
+	// Do not forget to release
+	cookieJar.Release()
 	// With this object you can collect cookies by two ways.
 	// 	1. Iterating with Response.VisitAllCookie
 	res.Header.VisitAllCookie(func(key, value []byte) {
@@ -51,6 +55,7 @@ func main() {
 	// 	2. You can use CookieJar.ResponseCookies.
 	cookieJar.ResponseCookies(res)
 
+	fmt.Printf("\nYour cookies:\n")
 	for {
 		cookie := cookieJar.Get()
 		if cookie == nil {
