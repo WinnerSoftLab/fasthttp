@@ -96,3 +96,15 @@ func (cj *CookieJar) RequestCookies(r *Request) {
 		cj.SetBytesKV(key, value)
 	})
 }
+
+// WriteTo writes all cookies representation to w.
+func (cj *CookieJar) WriteTo(w io.Writer) (n int64, err error) {
+	for _, c := range *cj {
+		nn, err := c.WriteTo(w)
+		n += nn
+		if err != nil {
+			break
+		}
+	}
+	return
+}
