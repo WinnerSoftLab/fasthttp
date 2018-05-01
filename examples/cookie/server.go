@@ -15,6 +15,8 @@ func main() {
 
 func cookieHandler(ctx *fasthttp.RequestCtx) {
 	cookie := fasthttp.AcquireCookie()
+	cookie1 := fasthttp.AcquireCookie()
+	cookie2 := fasthttp.AcquireCookie()
 
 	cookie.SetDomain("make.fasthttp.great.again")
 	cookie.SetKey("key")
@@ -22,5 +24,15 @@ func cookieHandler(ctx *fasthttp.RequestCtx) {
 	cookie.SetPath("/")
 	cookie.SetValue("value")
 
+	cookie1.SetDomain("make.fasthttp.great.again")
+	cookie1.SetKey("use")
+	cookie1.SetPath("/path")
+	cookie1.SetValue("fasthttp")
+
+	cookie2.SetKey("value")
+	cookie2.SetValue("key")
+
 	ctx.Response.Header.SetCookie(cookie)
+	ctx.Response.Header.SetCookie(cookie1)
+	ctx.Response.Header.SetCookie(cookie2)
 }
