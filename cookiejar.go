@@ -82,3 +82,17 @@ func (cj *CookieJar) PeekValue(key string) []byte {
 	}
 	return nil
 }
+
+// ResponseCookies gets all response cookies and stores it in cj.
+func (cj *CookieJar) ResponseCookies(r *Response) {
+	r.Header.VisitAllCookie(func(key, value []byte) {
+		cj.SetBytesKV(key, value)
+	})
+}
+
+// RequestCookies gets all request cookies and stores it in cj.
+func (cj *CookieJar) RequestCookies(r *Request) {
+	r.Header.VisitAllCookie(func(key, value []byte) {
+		cj.SetBytesKV(key, value)
+	})
+}
