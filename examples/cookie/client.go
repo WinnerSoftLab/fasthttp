@@ -15,7 +15,7 @@ func main() {
 		panic(err)
 	}
 
-	// We can get the cookie from diferents ways.
+	// We can achieve cookies by different ways.
 	// 1. Using 'key' parameter. Fasthttp will search using key in cookie field.
 	cookie := fasthttp.AcquireCookie()
 	cookie.SetKey("key")
@@ -26,16 +26,37 @@ func main() {
 	cookie.Reset()
 
 	// 2. You can parse request header 'Set-Cookie' field.
+	// But with this method you just can get the first cookie value.
 	value := res.Header.Peek("Set-Cookie")
 	if value != nil {
 		cookie.ParseBytes(value)
 		fmt.Printf("Your cookie is '%s' parsing bytes\n", cookie.Cookie())
 	}
 
-	// 3. Or you can use 'PeekCookie' from ResponseHeader using key.
+	// 3. You can use 'PeekCookie' from ResponseHeader using key.
 	// This is the long way to get cookie instead of using 'Cookie' structure.
 	value = res.Header.PeekCookie("key")
 	if value != nil {
 		fmt.Printf("Your cookie is '%s' parsing by key\n", value)
+	}
+
+	// 4. Or finally you can use CookieJar object.
+	cookieJar := &fasthttp.CookieJar{}
+	// With this object you can collect cookies by two ways.
+	// 	1. Iterating with Response.VisitAllCookie
+	res.Header.VisitAllCookie(func(key, value []byte) {
+		cookieJar.SetBytesKV(key, value)
+	})
+
+	// 	2. You can use CookieJar.ResponseCookies.
+	cookieJar.ResponseCookies(res)
+
+	for {
+		cookie := cookieJar.Get()
+		if cookie == nil {
+			break
+		}
+
+		fmt.Printf("%s\n", cookie.Value())
 	}
 }
