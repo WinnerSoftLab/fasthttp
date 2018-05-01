@@ -14,6 +14,15 @@ func (cj *CookieJar) Set(key, value string) {
 	setCookie(cj, key, value)
 }
 
+// Get returns and delete a value from cookiejar.
+func (cj *CookieJar) Get() *Cookie {
+	for k, v := range *cj {
+		delete(*cj, k)
+		return v
+	}
+	return nil
+}
+
 // SetBytesK sets cookie using key=value
 //
 // This function can replace an existent cookie.
