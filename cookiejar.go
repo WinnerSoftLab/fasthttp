@@ -1,5 +1,7 @@
 package fasthttp
 
+import "io"
+
 // CookieJar is container of cookies
 //
 // This object is used to handle multiple cookies
